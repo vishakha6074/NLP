@@ -1,0 +1,31 @@
+import re
+
+# A simple dictionary of words for segmentation (This can be expanded)
+word_dict = set([
+    "we", "are", "the", "people", "mention", "your", "faves", "now", "playing", "the", 
+    "walking", "dead", "follow", "me"
+])
+
+# Function to split the hashtag into words
+def split_hashtag(hashtag):
+    # Try to segment the hashtag using dynamic programming
+    n = len(hashtag)
+    dp = [None] * (n + 1)
+    dp[0] = []
+    
+    for i in range(1, n + 1):
+        for j in range(i):
+            if dp[j] is not None and hashtag[j:i] in word_dict:
+                dp[i] = dp[j] + [hashtag[j:i]]
+                break
+
+    return dp[n] if dp[n] is not None else []
+
+# Read input
+n = int(input())  # Number of hashtags
+hashtags = [input().strip() for _ in range(n)]
+
+# Output the segmented words for each hashtag
+for hashtag in hashtags:
+    result = split_hashtag(hashtag)
+    print(" ".join(result))
